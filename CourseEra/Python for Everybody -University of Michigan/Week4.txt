@@ -1,0 +1,9 @@
+Loops and iteration
+for loop, while loop, break statement, continue abandom the current iteration and 
+goes to the next iteration or to the top of the loop
+definite loops example upto how much loop is going to occur
+loop idioms like counting number of loops, summing in loop, finding the average/mean in the loop, 
+filtering in loop, searching inside the loop using a boolean variable
+find the largest and smallest value in an array using loop in python
+None data type holds absence of value nothing or none values 
+is or isnot operators 

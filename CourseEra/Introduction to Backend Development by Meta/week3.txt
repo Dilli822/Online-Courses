@@ -1,0 +1,8 @@
+Web Server vs Application Server
+Dynamic vs Static Content Website
+SPA(Single Page Applications)
+JSON Object, Bundling, Lazy Loading
+React Component
+View & specific part rendering
+Virtual DOM vs browser DOM
+React Components Hierarchy
