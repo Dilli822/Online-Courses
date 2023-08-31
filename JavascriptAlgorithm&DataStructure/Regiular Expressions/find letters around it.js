@@ -40,6 +40,6 @@
 // Passed: Your regex should not match any criminals in the string P1P2P3
 // Passed: Your regex should match fifty criminals (CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC) in the string P2P1P5P4CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCP3.
 
-let reCriminals = /./; // change this liine
+// let reCriminals = /./; // change this liine
 
 let reCriminals = /C+/; // Change this line
