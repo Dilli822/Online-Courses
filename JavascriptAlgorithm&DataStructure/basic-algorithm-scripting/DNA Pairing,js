@@ -1,0 +1,21 @@
+function pairElement(str) {
+  // Define a mapping for the complementary bases
+  const basePairs = { A: 'T', T: 'A', C: 'G', G: 'C' };
+
+  // Split the input string into an array of characters
+  const strArray = str.split('');
+
+  // Use map to create an array of pairs
+  const pairs = strArray.map(base => [base, basePairs[base]]);
+
+  return pairs;
+}
+
+// Test cases
+console.log(pairElement("ATCGA")); // [["A","T"],["T","A"],["C","G"],["G","C"],["A","T"]]
+console.log(pairElement("TTGAG")); // [["T","A"],["T","A"],["G","C"],["A","T"],["G","C"]]
+console.log(pairElement("CTCTA")); // [["C","G"],["T","A"],["C","G"],["T","A"],["A","T"]]
+
+// pairElement("ATCGA") should return [["A","T"],["T","A"],["C","G"],["G","C"],["A","T"]].
+// Failed: pairElement("TTGAG") should return [["T","A"],["T","A"],["G","C"],["A","T"],["G","C"]].
+// Failed: pairElement("CTCTA") should return [["C","G"],["T","A"],["C","G"],["T","A"],["A","T"]].
