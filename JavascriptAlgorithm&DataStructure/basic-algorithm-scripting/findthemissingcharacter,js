@@ -1,0 +1,43 @@
+function fearNotLetter(str) {
+    for (let i = 0; i < str.length - 1; i++) {
+      // Check if the next character is not the expected next letter
+      if (str.charCodeAt(i + 1) !== str.charCodeAt(i) + 1) {
+        // Return the missing character
+        return String.fromCharCode(str.charCodeAt(i) + 1);
+      }
+    }
+  
+    // If no missing character is found, return undefined
+    return undefined;
+  }
+  
+  // Test cases
+  console.log(fearNotLetter("abce"));  // should return "d"
+  console.log(fearNotLetter("abcdefghjklmno"));  // should return "i"
+  console.log(fearNotLetter("stvwx"));  // should return "u"
+  console.log(fearNotLetter("bcdf"));  // should return "e"
+  console.log(fearNotLetter("abcdefghijklmnopqrstuvwxyz"));  // should return undefined
+  
+
+// let str = "abc";
+// console.log(str.charCodeAt(0)); // Output: 97
+// console.log(str.charCodeAt(1)); // Output: 98
+// console.log(str.charCodeAt(2)); // Output: 99
+
+
+// const str = "abd";
+// // const str = "abc";
+// const i = 0;
+
+// // Check if the next character is not the expected next letter
+// if (str.charCodeAt(i + 1) !== str.charCodeAt(i) + 1) {
+//   console.log("There is a missing character in the sequence.");
+// } else {
+//   console.log("The characters are in sequential order.");
+// }
+// In this case:
+
+// str.charCodeAt(i + 1) is the ASCII code of "b" (the character at index i + 1, which is 1).
+// str.charCodeAt(i) + 1 is the ASCII code of "a" plus 1 (the character at index i, which is 0 plus 1, which is 1).
+
+// If a missing character is found, returns the missing character by adding 1 to the ASCII code of the current character and converting it back to a character using String.fromCharCode.
