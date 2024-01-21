@@ -6,7 +6,7 @@ import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { Layout, Button, theme } from "antd";
 import { Col, Row } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from "@ant-design/icons";
-
+import { Link } from "react-router-dom";
 const { Meta } = Card;
 const { Header, Sider, Content } = Layout;
 
@@ -20,13 +20,6 @@ const NewsFeed = () => {
     const [collapsed, setCollapsed] = useState(true);
     const [visibleCards, setVisibleCards] = useState(4);
     const [isAdditionalVisible, setIsAdditionalVisible] = useState(false);
-    // const [userBasicData, setUserBasicData] = useState([]);
-    // const [userBasicInfo, setUserBasicInfo] = useState({});
-    // const [username, setUserName] = useState(null);
-    // const [user, setUser] = useState("");
-    // const [imageUrl, setImageUrl] = useState(null);
-    // const [authorId, setAuthorId] = useState("");
-    // const [userId, setUserId] = useState("");
 
     const currentDate = new Date().toLocaleDateString();
     const options = { day: "numeric", month: "short", year: "numeric" };
@@ -73,33 +66,42 @@ const NewsFeed = () => {
         },
     ];
 
-
     const [blogData, setBlogData] = useState([]);
 
     useEffect(() => {
         const fetchBlogData = async () => {
-          try {
-            const response = await fetch("http://127.0.0.1:8000/blog/api/blog-details/", {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-              },
-            });
-      
-            const data = await response.json();
-            console.log("Fetched Data:", data); // Log the fetched data
-            setBlogData(data);
-          } catch (error) {
-            console.error(error);
-          }
+            try {
+                const response = await fetch("http://127.0.0.1:8000/blog/api/blog-details/", {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    },
+                });
+
+                const data = await response.json();
+                console.log("Fetched Data:", data); // Log the fetched data
+                setBlogData(data);
+            } catch (error) {
+                console.error(error);
+            }
         };
-      
+
         fetchBlogData();
-      
+
         // Cleanup function if needed
         return () => {
-          // Cleanup logic
+            // Cleanup logic
         };
-      }, []);
+    }, []);
+
+    const visibleRecentsCards = 4;
+
+    const recentBlogs = blogData
+        .filter((blogItem) => {
+            // Calculate the time difference in hours
+            const timeDifference = (new Date() - new Date(blogItem.created_at)) / (1000 * 60 * 60);
+            return timeDifference <= 24;
+        })
+        .slice(0, visibleRecentsCards);
     return (
         <>
             <AppHeader></AppHeader>
@@ -108,61 +110,52 @@ const NewsFeed = () => {
                 <>
                     <br />
 
-                    <h1 style={{ textAlign: "left" }}>  Blog & Articles </h1>
+                    <h1 style={{ textAlign: "left" }}> Blog & Articles </h1>
 
                     <Row gutter={24} style={{}}>
                         <Col md={17} style={{}}>
-                        {blogData.slice(0, visibleCards).map((blogItem) => (
-            <Col xs={24} md={24} key={blogItem.id} style={{ display: "flex", alignItems: "center", margin: "1% 0", padding: "2% 0", background: "#fff", borderRadius: "8px" }}>
-              <Col xs={4} md={3}>
-                <img alt="no-image" src={blogItem.image} style={{ width: "100%", borderRadius: "3px" }} />
-              </Col>
+                            {blogData.slice(0, visibleCards).map((blogItem) => (
+                                <Col xs={24} md={24} key={blogItem.id} style={{ display: "flex", alignItems: "center", margin: "1%", padding: "2% 0", background: "#fff", borderRadius: "8px" }}>
+                                    <Col xs={4} md={3}>
+                                        <Link to={`/details/${blogItem.id}`} style={{ fontWeight: "normal", alignItems: "start", color: "#000" }}>
+                                            <img alt="no-image" src={blogItem.image} style={{ width: "100%", borderRadius: "3px" }} />
+                                        </Link>
+                                    </Col>
 
-              <Col xs={19} md={19}>
-                <h2>{blogItem.title}</h2>
-                <p>{blogItem.description}</p>
-                <p>
-                  <span>
-                    {" "}
-                    <b>{blogItem.user_id}, </b>{" "}
-                  </span>
-                  🗓️ {formatDate(blogItem.date)}
-                </p>
-              </Col>
-            </Col>
-          ))}
+                                    <Col xs={19} md={19} >
+                                        <Link to={`/details/${blogItem.id}`} style={{ fontWeight: "normal", alignItems: "start", color: "#000" }}>
+                                            <h2>{blogItem.title}</h2>
+
+                                            <p style={{ height: "80px", overflow: "hidden" }}>{blogItem.description}</p>
+                                        </Link>
+                                        <p>
+                                            <span>
+                                                {" "}
+                                                <b>user_id: #{blogItem.user_id}, </b>{" "}
+                                            </span>
+                                            🗓️ {formatDate(blogItem.date)}
+                                        </p>
+                                    </Col>
+                                </Col>
+                            ))}
                         </Col>
 
-                        <Col md={7} style={{ background: "#fff", borderRadius: "8px", position: "sticky", top: "50px", margin: "10px 0", height: "calc(100vh - 300px)", overflow: "hidden" }}>
-                            <h2> Trending </h2>
+                        <Col md={7} style={{ background: "#fff", borderRadius: "8px", position: "sticky", top: "50px", margin: "10px 0", height: "calc(100vh - 300px)", overflow: "auto" }}>
+                            <h2> Recent </h2>
                             <hr />
 
-                            <Col xs={24} md={24}>
-                                <Col xs={24}>
-                                    <h3> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet, reprehenderit! </h3>
-                                    <p>🗓️ sdsdsds </p>
+                            {recentBlogs.map((blogItem, index) => (
+                                <Col key={index} xs={24} md={24}>
+                                    <Col xs={24}>
+                                        <Link to={`/details/${blogItem.id}`} style={{ fontWeight: "normal", alignItems: "start", color: "#000" }}>
+                                            <img src={blogItem.image} style={{ width: "200px" }} />
+                                            <h3>{blogItem.title}</h3>
+                                            <p style={{ height: "100px", overflow: "hidden" }}>{blogItem.description} </p>
+                                        </Link>
+                                        {/* <p>🗓️ {blogItem.created_at.toLocaleString()} </p> */}
+                                    </Col>
                                 </Col>
-                            </Col>
-
-                            <Col xs={24} md={24}>
-                                <Col xs={24}>
-                                    <h3> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet, reprehenderit! </h3>
-                                    <p>🗓️ sdsdsds </p>
-                                </Col>
-                            </Col>
-
-                            <Col xs={24} md={24}>
-                                <Col xs={24}>
-                                    <h3> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet, reprehenderit! </h3>
-                                    <p>🗓️ sdsdsds </p>
-                                </Col>
-                            </Col>
-                            <Col xs={24} md={24}>
-                                <Col xs={24}>
-                                    <h3> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet, reprehenderit! </h3>
-                                    <p>🗓️ sdsdsds </p>
-                                </Col>
-                            </Col>
+                            ))}
                         </Col>
                     </Row>
 

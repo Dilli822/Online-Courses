@@ -25,7 +25,7 @@ class UserDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserDetails
-        fields = ["user_id", 'address', 'phone_number', 'bio', 'total_blogs']
+        fields = ["user_id", 'address', 'phone_number', 'bio', 'total_blogs', "image"]
 
     def get_total_blogs(self, obj):
         return obj.user.blogs.count()

@@ -31,6 +31,7 @@ class UserDetails(models.Model):
     address = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15)
     bio = models.TextField()
+    image = models.ImageField(upload_to='user_images/', null=True, blank=True)
 
     @property
     def total_blogs(self):

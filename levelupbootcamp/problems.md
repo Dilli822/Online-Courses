@@ -11,3 +11,5 @@ Problems/Insights in the project
    - configuration for the cors headers like authorization
    - i have not defined the states for the api data 
    - useffect hooks
+   - image paths
+

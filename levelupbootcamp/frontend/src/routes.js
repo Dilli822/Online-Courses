@@ -15,6 +15,7 @@ import UserProfile from './components/apps/blogApp/profile/user/profile';
 import BlogList from './components/apps/blogApp/CRUD/read/blogList';
 import NewsFeed from './components/apps/blogApp/home/newsFeed';
 import PageNotFound from './components/apps/blogApp/error/error404';
+import Test from './components/apps/testing/test';
 const MainRouter = () => {
 
   return (
@@ -83,6 +84,13 @@ const MainRouter = () => {
           path="*"
           element={<PageNotFound />}
         />
+
+
+<Route
+          path="/test"
+          element={<Test />}
+        />
+
 
 
       </Routes>

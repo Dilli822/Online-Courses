@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView
 from .models import UserData, UserDetails
 from .serializers import UserSerializer, UserDetailsSerializer, UserUpdateSerializer
+from django.shortcuts import get_object_or_404
 
 
 class RegisterView(APIView):
@@ -60,3 +61,25 @@ class UserDeleteAPIView(APIView):
         user.delete()  # This will delete the user and cascade to related models
 
         return Response({"message": "Account deleted successfully."})
+    
+    
+class UserDetailsRetrieveUpdateView(RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserDetailsSerializer
+
+    def get_object(self):
+        # Retrieve UserDetails for the authenticated user
+        user = self.request.user
+        obj, created = UserDetails.objects.get_or_create(user=user)
+        return obj
+
+    def update(self, request, *args, **kwargs):
+        # Ensure the user field is set to the authenticated user
+        request.data['user'] = self.request.user.id
+
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
