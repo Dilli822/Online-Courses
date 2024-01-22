@@ -78,6 +78,9 @@ const NewsFeed = () => {
                 });
 
                 const data = await response.json();
+                // Sort the data in ascending order based on the date
+                data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
                 console.log("Fetched Data:", data); // Log the fetched data
                 setBlogData(data);
             } catch (error) {
@@ -102,6 +105,20 @@ const NewsFeed = () => {
             return timeDifference <= 24;
         })
         .slice(0, visibleRecentsCards);
+
+
+
+      // Filter blogs created between yesterday and today
+  const filteredRecentBlogs = recentBlogs.filter(blogItem => {
+    const blogDate = new Date(blogItem.created_at);
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    return blogDate >= yesterday && blogDate <= today;
+  });
+
+
     return (
         <>
             <AppHeader></AppHeader>
@@ -122,7 +139,7 @@ const NewsFeed = () => {
                                         </Link>
                                     </Col>
 
-                                    <Col xs={19} md={19} >
+                                    <Col xs={19} md={19}>
                                         <Link to={`/details/${blogItem.id}`} style={{ fontWeight: "normal", alignItems: "start", color: "#000" }}>
                                             <h2>{blogItem.title}</h2>
 
@@ -140,17 +157,19 @@ const NewsFeed = () => {
                             ))}
                         </Col>
 
-                        <Col md={7} style={{ background: "#fff", borderRadius: "8px", position: "sticky", top: "50px", margin: "10px 0", height: "calc(100vh - 300px)", overflow: "auto" }}>
-                            <h2> Recent </h2>
+                        <Col md={7} xs={24} style={{ background: "#fff", borderRadius: "8px", position: "sticky", top: "50px", margin: "10px 0", height: "calc(100vh - 200px)", overflow: "auto" }}>
+                          
+                            <h3> Recent | Total Blogs Posted: {localStorage.getItem('total_blogs_count')}+ </h3>
                             <hr />
 
-                            {recentBlogs.map((blogItem, index) => (
+                            {filteredRecentBlogs.map((blogItem, index) => (
                                 <Col key={index} xs={24} md={24}>
                                     <Col xs={24}>
                                         <Link to={`/details/${blogItem.id}`} style={{ fontWeight: "normal", alignItems: "start", color: "#000" }}>
-                                            <img src={blogItem.image} style={{ width: "200px" }} />
+                                            <img src={blogItem.image} style={{ width: "100px" }} />
                                             <h3>{blogItem.title}</h3>
-                                            <p style={{ height: "100px", overflow: "hidden" }}>{blogItem.description} </p>
+                                            <p>{blogItem.created_at}</p>
+                                            <p style={{ height: "50px", overflow: "hidden" }}>{blogItem.description} </p>
                                         </Link>
                                         {/* <p>🗓️ {blogItem.created_at.toLocaleString()} </p> */}
                                     </Col>

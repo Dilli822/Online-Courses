@@ -3,9 +3,11 @@ import { Layout, Menu } from "antd";
 import { Link } from "react-router-dom";
 // import logoImage from "../img/logo/bloglogo1.jpg"
 // import logoImage from "../img/logo/B-logo.png"
-import logoImage from "../img/logo/BlogLogo.png"
-const { Header } = Layout;
+// import logoImage from "../img/logo/BlogLogo.png"
+// import logoImage from "../img/logo/BlogApp.jpg"
+import logoImage from "../img/logo/blogCofffee.jpg";
 
+const { Header } = Layout;
 
 const AppHeader = () => {
     const [userBasicData, setUserBasicData] = useState([]);
@@ -16,6 +18,7 @@ const AppHeader = () => {
     const [authorId, setAuthorId] = useState("");
     const [userId, setUserId] = useState("");
 
+    const [totalBlogsCount, setTotalBlogsCount] = useState(null);
     const currentDate = new Date().toLocaleDateString();
     const options = { day: "numeric", month: "short", year: "numeric" };
     const formattedDate = new Date(currentDate).toLocaleDateString(undefined, options);
@@ -48,35 +51,6 @@ const AppHeader = () => {
         { key: "about", label: "About Us", path: "/about" },
     ];
 
-    // const fetchImageData = async () => {
-    //   try {
-    //     const response = await fetch("http://127.0.0.1:8000/account/api/userdetails/", {
-    //       headers: {
-    //         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //       },
-    //     });
-
-    //     // const responseImage = await fetch("http://127.0.0.1:8000/blog/api/user-blog-crud/", {
-    //     //   headers: {
-    //     //     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //     //   },
-    //     // });
-
-    //     const data = await response.json();
-    //     // const imgData = await responseImage.json();
-    //     console.log(data);
-
-    //     if (data.length > 0 ) {
-
-    //       // localStorage.setItem('user_image', imgData.image);
-    //       localStorage.setItem('user_image', data.image);
-
-    //     }
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // };
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -85,12 +59,6 @@ const AppHeader = () => {
                         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
                     },
                 });
-
-                // const responseImage = await fetch("http://127.0.0.1:8000/blog/api/user-blog-crud/", {
-                //   headers: {
-                //     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                //   },
-                // });
 
                 const data = await response.json();
                 // const imgData = await responseImage.json();
@@ -115,6 +83,27 @@ const AppHeader = () => {
             // cleanup logic
         };
     }, []); // empty dependency array means this effect runs once on mount
+
+
+
+    useEffect(() => {
+      const fetchTotalBlogsCount = async () => {
+        try {
+          const response = await fetch('http://127.0.0.1:8000/blog/api/total-blogs-count/');
+          if (response.ok) {
+            const data = await response.json();
+            setTotalBlogsCount(data.total_blogs_count);
+            localStorage.setItem("total_blogs_count", data.total_blogs_count);
+          } else {
+            console.error('Error fetching total blogs count');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+  
+      fetchTotalBlogsCount();
+    }, []);
 
     const onMenuItemClick = (label, path) => {
         if (label === "Logout") {
@@ -162,7 +151,7 @@ const AppHeader = () => {
             {/* Your Logo Component Here */}
             <div className="demo-logo" style={{ width: "50%" }}>
                 {/* Add your logo component or image here */}
-                <img src={logoImage} alt="Logo" style={{ width: "100px", verticalAlign: "middle" }} />
+                <img src={logoImage} alt="Logo" style={{ width: "50px", verticalAlign: "middle" }} />
             </div>
 
             {/* Menu component */}

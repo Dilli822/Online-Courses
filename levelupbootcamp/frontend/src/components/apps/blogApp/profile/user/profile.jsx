@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Space, Col, Row, Card, Button, List, Skeleton, Avatar, Collapse, Divider, Modal, Result, Input } from "antd";
+import { Layout, Space, Col, Row, Card, Button, List, Skeleton, Avatar, Collapse, Divider, Modal, Result, Input,message } from "antd";
 import AppHeader from "../../header/header";
 import AppFooter from "../../footer/footer";
 import { Link } from "react-router-dom";
 
-import { EditOutlined, CloseOutlined, SearchOutlined, FacebookOutlined,
-     TwitterOutlined, InstagramOutlined, GithubOutlined, LinkedinOutlined, 
-     SaveOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, CloseOutlined, SearchOutlined, FacebookOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined, LinkedinOutlined, SaveOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const { Footer } = Layout;
 const { Meta } = Card;
@@ -27,6 +25,7 @@ const UserProfile = () => {
     const [isEdit, setIsEdit] = useState(false);
     const [editUsername, setEditUsername] = useState(localStorage.getItem("user_name") || "username");
     const [firstUserImg, setFirstUserImg] = useState({ image: "" }); // Initial value with an empty string
+    const [newUserImage, setNewUserImage] = useState(null); // Add state for the new user i
 
     const showModal = () => {
         setIsDeleteModalVisible(true);
@@ -88,12 +87,14 @@ const UserProfile = () => {
         };
         fetchImageData();
         fetchBlogData(); // Call the async function when the component mounts
-
+        if (editImage) {
+            updateImage();
+        }
         // cleanup function if needed
         return () => {
             // cleanup logic
         };
-    }, []);
+    }, [], [editImage]);
 
     const handleUserDetailEdit = () => {
         setIsEdit(true);
@@ -102,7 +103,7 @@ const UserProfile = () => {
     const handleUserDetailCancel = () => {
         setIsEdit(false);
         setEditUsername(localStorage.getItem("user_name") || "username");
-     
+
         setEditImage(null); // Reset image
     };
 
@@ -186,9 +187,17 @@ const UserProfile = () => {
 
                 // Store the image URL or identifier in localStorage
                 localStorage.setItem("user_image", responseData.image);
+
+                         // Update the state immediately with the new image
+                         setFirstUserImg({ image: responseData.image });
+                // Show success message
+                message.success('Image updated successfully');
+  
+
             } else {
                 // Handle image update error
                 console.error("Error updating user details with image");
+                message.error('Something went wrong.try again');
             }
         } catch (error) {
             console.error("Error:", error);
@@ -215,6 +224,13 @@ const UserProfile = () => {
         setEditImage(file);
     };
 
+
+        // Trigger the image update when editImage changes
+        useEffect(() => {
+            handleUserDetailSave();
+        }, []);
+    
+
     return (
         <>
             <AppHeader />
@@ -225,10 +241,8 @@ const UserProfile = () => {
                 <Row>
                     <Col md={10} style={{ margin: "1%" }}>
                         <Card hoverable style={{}} cover={<img alt="example" src={firstUserImg?.image || ""} style={{ padding: "15px" }} />}>
-                            
                             {isEdit ? (
                                 <>
-                                
                                     <label>
                                         <b>Username</b>
                                     </label>
@@ -247,7 +261,6 @@ const UserProfile = () => {
                                     <Button icon={<SaveOutlined />} onClick={handleUserDetailSave}>
                                         Save
                                     </Button>
-                                  
                                     <br />
                                 </>
                             ) : (
@@ -258,7 +271,6 @@ const UserProfile = () => {
                                             <p>
                                                 <strong>Email:</strong> {localStorage.getItem("user_email")}
                                             </p>
-        
                                         </>
                                     }
                                 />
@@ -279,41 +291,38 @@ const UserProfile = () => {
                         </Card>
                     </Col>
 
-                    <Col md={13} style={{ background: "#fff", margin: "1%", borderRadius: "8px" }}>
-                    
-
-                        <Row style={{ padding: "0 4%", marginTop: 0 }}>
+                    <Col md={13} xs={24} style={{ background: "#fff", margin: "1%", borderRadius: "8px" }}>
+                        <Row gutter={24} style={{ padding: "0 4%", margin: 0 }}>
                             <br />
 
-                            <Col md={24} style={{ padding: "0 0 3% 0" }}>
+                            <Col md={24} xs={23} style={{ padding: "0 0 3% 0", margin: 0 }}>
                                 <h2> Blogs {blogList.length === 0 ? 0 : blogList.length}</h2>
                                 {blogList.length === 0 ? (
                                     <Result status="404" title="No Blogs Found" subTitle="You haven't published any blogs yet." />
                                 ) : (
-                                    <Row gutter={24}>
-                                
-    {blogList.map((item) => (
-        <Col key={item.id} md={12} style={{ height: "150px", overflow: "hidden", border: "1px solid #d9d9d9", borderRadius: "5px", margin: "1%", padding: "2%", boxShadow: "0 2px 0 rgba(0, 0, 0, 0.02);" }}>
-     
-                <div style={{ textAlign: "left" }}>
-                    <img src={item.image} alt="Blog" style={{ width: "50px", height: "auto", marginBottom: 8 }} />
-                </div>
-                <div style={{ textAlign: "left" }}>
-                    &nbsp;
-                    <Link to={`/details/${item.id}`} style={{ fontWeight: "normal", alignItems: "start", color: "#000" }}>
-                        {item.title}
-                    </Link>
-              
-            </div>
-            <div style={{ color: "#888", marginTop: 4 }}>{item.description}</div>
-            <div style={{ marginTop: 8 }}>
-                <Link to={`/blogs`}>View Blogs</Link>
-            </div>
-        </Col>
-    ))}
-
-
-                                       
+                                    <Row gutter={24} style={{ height: "500px", overflow: "auto" , margin: "0" }}>
+                                        {blogList.map((item) => (
+                                            <Col
+                                                key={item.id}
+                                                md={11}
+                                                xs={24}
+                                                style={{ height: "150px", overflow: "hidden", border: "1px solid #d9d9d9", borderRadius: "5px", margin: "1%", padding: "2%", boxShadow: "0 2px 0 rgba(0, 0, 0, 0.02);" }}
+                                            >
+                                                <div style={{ textAlign: "left" }}>
+                                                    <img src={item.image} alt="Blog" style={{ width: "50px", height: "auto", marginBottom: 8 }} />
+                                                </div>
+                                                <div style={{ textAlign: "left" }}>
+                                                    &nbsp;
+                                                    <Link to={`/details/${item.id}`} style={{ fontWeight: "normal", alignItems: "start", color: "#000" }}>
+                                                        {item.title}
+                                                    </Link>
+                                                </div>
+                                                <div style={{ color: "#888", marginTop: 4 }}>{item.description}</div>
+                                                <div style={{ marginTop: 8 }}>
+                                                    <Link to={`/blogs`}>View Blogs</Link>
+                                                </div>
+                                            </Col>
+                                        ))}
                                     </Row>
                                 )}
 

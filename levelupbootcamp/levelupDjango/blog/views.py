@@ -53,3 +53,8 @@ class BlogDetailsRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIV
         self.perform_destroy(instance)
         return Response({"detail": "Delete successful based on the post."},
                         status=status.HTTP_204_NO_CONTENT)
+        
+class TotalBlogsCountAPIView(generics.ListCreateAPIView):
+    def get(self, request, *args, **kwargs):
+        total_blogs_count = BlogDetails.objects.count()
+        return Response({"total_blogs_count": total_blogs_count})
