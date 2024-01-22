@@ -291,6 +291,28 @@ const UserProfile = () => {
                                     <Result status="404" title="No Blogs Found" subTitle="You haven't published any blogs yet." />
                                 ) : (
                                     <Row gutter={24}>
+                                
+    {blogList.map((item) => (
+        <Col key={item.id} md={12} style={{ height: "150px", overflow: "hidden", border: "1px solid #d9d9d9", borderRadius: "5px", margin: "1%", padding: "2%", boxShadow: "0 2px 0 rgba(0, 0, 0, 0.02);" }}>
+     
+                <div style={{ textAlign: "left" }}>
+                    <img src={item.image} alt="Blog" style={{ width: "50px", height: "auto", marginBottom: 8 }} />
+                </div>
+                <div style={{ textAlign: "left" }}>
+                    &nbsp;
+                    <Link to={`/details/${item.id}`} style={{ fontWeight: "normal", alignItems: "start", color: "#000" }}>
+                        {item.title}
+                    </Link>
+              
+            </div>
+            <div style={{ color: "#888", marginTop: 4 }}>{item.description}</div>
+            <div style={{ marginTop: 8 }}>
+                <Link to={`/blogs`}>View Blogs</Link>
+            </div>
+        </Col>
+    ))}
+
+
                                        
                                     </Row>
                                 )}
