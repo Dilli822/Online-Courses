@@ -4,7 +4,9 @@ import AppHeader from "../../header/header";
 import AppFooter from "../../footer/footer";
 import { Link } from "react-router-dom";
 
-import { EditOutlined, CloseOutlined, SearchOutlined, FacebookOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined, LinkedinOutlined, SaveOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, CloseOutlined, SearchOutlined, FacebookOutlined,
+     TwitterOutlined, InstagramOutlined, GithubOutlined, LinkedinOutlined, 
+     SaveOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const { Footer } = Layout;
 const { Meta } = Card;
@@ -24,9 +26,6 @@ const UserProfile = () => {
     const [userFullDetails, setUserFullDetails] = useState();
     const [isEdit, setIsEdit] = useState(false);
     const [editUsername, setEditUsername] = useState(localStorage.getItem("user_name") || "username");
-    const [editDescription, setEditDescription] = useState(localStorage.getItem("user_email"));
-    const [editPhoneNumber, setEditPhoneNumber] = useState();
-    const [editUserAddress, setEditUserAddress] = useState();
     const [firstUserImg, setFirstUserImg] = useState({ image: "" }); // Initial value with an empty string
 
     const showModal = () => {
@@ -103,8 +102,7 @@ const UserProfile = () => {
     const handleUserDetailCancel = () => {
         setIsEdit(false);
         setEditUsername(localStorage.getItem("user_name") || "username");
-        setEditPhoneNumber(""); // Reset phone number
-        setEditUserAddress(""); // Reset user address
+     
         setEditImage(null); // Reset image
     };
 
@@ -160,6 +158,7 @@ const UserProfile = () => {
             console.error("Error:", error);
         }
     };
+
     const updateImage = async () => {
         try {
             // Get user id from localStorage
@@ -226,60 +225,10 @@ const UserProfile = () => {
                 <Row>
                     <Col md={10} style={{ margin: "1%" }}>
                         <Card hoverable style={{}} cover={<img alt="example" src={firstUserImg?.image || ""} style={{ padding: "15px" }} />}>
-                            {/* <Meta
-                                title={`${localStorage.getItem("user_name")}` || "username: "}
-                                description={
-                                    <>
-                                        <p> <strong> Email:</strong> {`${localStorage.getItem("user_email")}`} </p>
-                                        {additionalInformation.map((info, index) => (
-                                            <p key={index}>
-                                                <strong>{info.label}:</strong> {info.value}
-                                            </p>
-                                        ))}
-                                    </>
-                                }
-                                // avatar={<img src="" alt="Avatar" />}
-                                style={{ color: "blue" }}
-                                onClick={() => console.log("Card Clicked")}
-                                // ... other properties
-                            />
-                            <Button icon={<EditOutlined />}>edit</Button>
-                            &nbsp; &nbsp;
-                            <Button icon={<SaveOutlined />}>Save</Button>
-                            &nbsp; &nbsp; */}
-                            {/* <Button danger icon={<DeleteOutlined />}>
-                                Delete Account{" "}
-                            </Button> */}
+                            
                             {isEdit ? (
                                 <>
-                                    {/* <label> <b>phoneno: </b> </label> 
-
-<Input
-            value={
-              editPhoneNumber
-            }
-            onChange={(e) => setEditPhoneNumber(e.target.value)}
-            style={{  border: "none", minHeight: "35px", background: "none" }}
-
-            
-     
-            placeholder="phone number"
-          />
-         <label> <b>address:</b> </label> 
-<Input
-            value={
-              editUserAddress
-            }
-            onChange={(e) => setEditUserAddress(e.target.value)}
-            style={{  border: "none", minHeight: "35px", background: "none" }}
-     
-        
-            placeholder="address"
-          />
-
-         <div>
-      
-            */}
+                                
                                     <label>
                                         <b>Username</b>
                                     </label>
@@ -298,7 +247,7 @@ const UserProfile = () => {
                                     <Button icon={<SaveOutlined />} onClick={handleUserDetailSave}>
                                         Save
                                     </Button>
-                                    {/* </div> */}
+                                  
                                     <br />
                                 </>
                             ) : (
@@ -309,16 +258,7 @@ const UserProfile = () => {
                                             <p>
                                                 <strong>Email:</strong> {localStorage.getItem("user_email")}
                                             </p>
-                                            {/* // Conditional rendering of user details */}
-                                            {/* {userFullDetails && userFullDetails.length > 0 ? (
-  userFullDetails.map((info) => (
-    <p>
-      <strong>Address:</strong> {info.address}, <strong>Phone Number:</strong> {info.phone_number}
-    </p>
-  ))
-) : (
-  <p>No user details available.</p>
-)} */}
+        
                                         </>
                                     }
                                 />
@@ -340,21 +280,7 @@ const UserProfile = () => {
                     </Col>
 
                     <Col md={13} style={{ background: "#fff", margin: "1%", borderRadius: "8px" }}>
-                        <Col md={24}>
-                            <Row style={{ padding: "0 3%" }}>
-                                <Col md={24}>
-                                    {/* <h2> About: </h2>
-                                    <p>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate esse nobis corrupti cum numquam libero inventore et, rerum id sed consequatur aperiam laboriosam a blanditiis. Quis, suscipit!
-                                        Consectetur perferendis tenetur aspernatur incidunt blanditiis esse obcaecati facilis, harum perspiciatis est odit quibusdam in illo dolores eligendi sed ullam officia reiciendis fugiat.
-                                    </p> */}
-                                    {/* <p> Joined On 2020 </p> */}
-                                    {/* <Button icon={<EditOutlined />}>edit</Button>
-                                    &nbsp; &nbsp;
-                                    <Button icon={<SaveOutlined />}>Save</Button> */}
-                                </Col>
-                            </Row>
-                        </Col>
+                    
 
                         <Row style={{ padding: "0 4%", marginTop: 0 }}>
                             <br />
@@ -365,39 +291,7 @@ const UserProfile = () => {
                                     <Result status="404" title="No Blogs Found" subTitle="You haven't published any blogs yet." />
                                 ) : (
                                     <Row gutter={24}>
-                                        {blogList.slice(0, 4).map((item) => (
-                                            // Import the Link component from react-router-dom
-
-                                            // ... (other imports and code)
-
-                                            <Col
-                                                key={item.id}
-                                                md={11}
-                                                style={{ height: "150px", overflow: "hidden", border: "1px solid #d9d9d9", borderRadius: "5px", margin: "1%", padding: "2%", boxShadow: "0 2px 0 rgba(0, 0, 0, 0.02);" }}
-                                            >
-                                                {/* <div style={{ display: "flex", flexDirection: "row", alignItems: "center" , }}> */}
-                                                <div style={{}}>
-                                                    <div style={{ textAlign: "left" }}>
-                                                        {/* Use Link to create a link to the Details page with the item.id in the URL */}
-                                                        {/* <Link to={`/details/${item.id}`}> */}
-                                                        <img src={item.image} alt="Blog" style={{ width: "50px", height: "auto", marginBottom: 8 }} />
-                                                        {/* </Link> */}
-                                                    </div>
-                                                    <div style={{ textAlign: "left" }}>
-                                                        &nbsp;
-                                                        {/* Use Link to create a link to the Details page with the item.id in the URL */}
-                                                        <Link to={`/details/${item.id}`} style={{ fontWeight: "normal", alignItems: "start", color: "#000" }}>
-                                                            {item.title}
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                                <div style={{ color: "#888", marginTop: 4 }}>{item.description}</div>
-                                                <div style={{ marginTop: 8 }}>
-                                                    {/* Use Link to create a link to the Details page with the item.id in the URL */}
-                                                    <Link to={`/blogs`}>View Blogs</Link>
-                                                </div>
-                                            </Col>
-                                        ))}
+                                       
                                     </Row>
                                 )}
 
