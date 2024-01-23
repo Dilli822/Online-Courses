@@ -6,6 +6,7 @@ import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { Layout, Button, theme } from "antd";
 import { Col, Row } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const { Meta } = Card;
 const { Header, Sider, Content } = Layout;
@@ -26,11 +27,8 @@ const Home = () => {
 
     // const currentDate = formatDate();
 
-
-
-
-
-
+    const [randomBlogId, setRandomBlogId] = useState(null);
+ 
     const cardData = Array.from({ length: 14 }, (_, index) => ({
         key: index + 1,
         user: `user useruseruseruser${index + 1}`,
@@ -70,33 +68,63 @@ const Home = () => {
         },
     ];
 
+    const [blogBannerData, setBlogBannerData] = useState(null);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch('http://127.0.0.1:8000/blog/api/latest-blog/');
+          if (response.ok) {
+            const data = await response.json();
+            setBlogBannerData(data);
+          } else {
+            console.error('Error fetching blog details:', response.status, response.statusText);
+          }
+        } catch (error) {
+          console.error('Error fetching blog details:', error);
+        }
+      };
+  
+      fetchData(); // Call the fetchData function when the component mounts
+    }, []); // The empty dependency array ensures that the effect runs only once, similar to componentDidMount
+  
     return (
         <>
             <AppHeader></AppHeader>
 
             <Layout style={{ padding: "0 10%" }}>
                 <h1 style={{ textAlign: "left" }}> Today's Blog & Articles </h1>
-                <Row gutter={24} style={{ display: "flex", alignItems: "center" }}>
-                    <Col xs={24} md={12}>
-                        <img alt="" src="https://unsplash.it/700" style={{ width: "100%", border: "1px solid #ccc", borderRadius: "8px" }} />
-                    </Col>
+                <Row style={{ display:  "flex", alignItems: "center"}}>
+                <Col xs={24} md={12}>
+                <img
+          alt=""
+          src={blogBannerData ? `http://127.0.0.1:8000${blogBannerData.image}` : 'https://unsplash.it/700'}
+          style={{ width: '100%', border: '1px solid #ccc', borderRadius: '8px' }}
+        />
+      </Col>
 
-                    <Col xs={24} md={12}>
-                        <h1> Lorem ipsum dolor, sit amet consectetur adipisicing elit.lorem4adipisicing e </h1>
-                        <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam, impedit. consectetur adipisicing elit. Totam, impedit. </p>
-                        <p>
-                            {" "}
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe, odit. Est ipsum nostrum dolorem repudiandae? Asperiores iure possimus ea omnis ab nihil! Laudantium dolore nam impedit dolores eveniet dolor
-                            recusandae architecto, vero optio quidem?{" "}
-                        </p>
-                        <span>🗓️ {formatDate(currentDate)}</span>
-                        <br /> <br />
-                        <span>
-                            {" "}
-                            <b>Read More.. </b>{" "}
-                        </span>
-                    </Col>
-                </Row>
+      <Col xs={24} md={12}>
+        {blogBannerData && (
+          <>
+          <div style={{ padding: "2%  5%"}}>
+          <Link to={`/details/${blogBannerData.id}`} style={{ fontWeight: "normal", alignItems: "start", color: "#000" }}>
+            <h1>{blogBannerData.title}</h1>
+            <p>{blogBannerData.description}</p>
+            <p>
+              {/* Add your paragraphs or any other content here */}
+            </p>
+            <span>🗓️ {formatDate(blogBannerData.date)}</span>
+            <br /> <br />
+            <span>
+              {' '}
+              <b>Read More.. </b>{' '}
+            </span>
+            </Link>
+            </div>
+          </>
+        )}
+      </Col>
+      </Row>
 
                 <>
                     <br />

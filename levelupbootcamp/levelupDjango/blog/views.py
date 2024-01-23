@@ -58,3 +58,17 @@ class TotalBlogsCountAPIView(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         total_blogs_count = BlogDetails.objects.count()
         return Response({"total_blogs_count": total_blogs_count})
+    
+    
+class LatestBlog(generics.ListCreateAPIView):
+    serializer_class = BlogDetailsSerializer
+
+    def get(self, request, *args, **kwargs):
+        # Get the last blog post from the database
+        last_blog = BlogDetails.objects.order_by('-id').first()
+
+        if last_blog:
+            serializer = self.serializer_class(last_blog)
+            return Response(serializer.data)
+        else:
+            return Response({"detail": "No blog post found in the database."})

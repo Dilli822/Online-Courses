@@ -168,7 +168,7 @@ const NewsFeed = () => {
                                         <Link to={`/details/${blogItem.id}`} style={{ fontWeight: "normal", alignItems: "start", color: "#000" }}>
                                             <img src={blogItem.image} style={{ width: "100px" }} />
                                             <h3>{blogItem.title}</h3>
-                                            <p>{blogItem.created_at}</p>
+                                            <p>🗓️  {blogItem.created_at}</p>
                                             <p style={{ height: "50px", overflow: "hidden" }}>{blogItem.description} </p>
                                         </Link>
                                         {/* <p>🗓️ {blogItem.created_at.toLocaleString()} </p> */}

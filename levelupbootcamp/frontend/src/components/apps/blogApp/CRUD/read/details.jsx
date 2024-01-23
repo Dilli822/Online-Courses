@@ -56,6 +56,8 @@ const Details = () => {
           <Col span={24}>
             <Title>{details.title}</Title>
             <Text>Published at: {details.created_at}</Text>
+            <br/>
+            {/* <Text>Updated at: {details.updated_at}</Text> */}
             {/* <Image src={details.image} alt="Blog Image" /> */}
             <div  style={{ textAlign: "center"}}>
         
