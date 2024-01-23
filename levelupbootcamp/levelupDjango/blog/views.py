@@ -5,6 +5,9 @@ from .models import BlogDetails
 from .serializers import BlogDetailsSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from django.db.models.functions import ExtractYear
+from django.utils import timezone
+
 
 class BlogDetailsListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -59,7 +62,6 @@ class TotalBlogsCountAPIView(generics.ListCreateAPIView):
         total_blogs_count = BlogDetails.objects.count()
         return Response({"total_blogs_count": total_blogs_count})
     
-    
 class LatestBlog(generics.ListCreateAPIView):
     serializer_class = BlogDetailsSerializer
 
@@ -72,3 +74,33 @@ class LatestBlog(generics.ListCreateAPIView):
             return Response(serializer.data)
         else:
             return Response({"detail": "No blog post found in the database."})
+        
+class LatestLimitBlog(generics.ListCreateAPIView):
+    serializer_class = BlogDetailsSerializer
+
+    def get(self, request, *args, **kwargs):
+        # Get the current year
+        current_year = timezone.now().year
+
+        # Filter the latest four blogs for the current year
+        latest_blogs = BlogDetails.objects.filter(date__year=current_year).order_by('-date')[:4]
+
+        if latest_blogs:
+            serializer = self.serializer_class(latest_blogs, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({"detail": f"No blog posts found for the year {current_year}."})
+        
+        
+class LatestOpenRecentBlogs(generics.ListCreateAPIView):
+    serializer_class = BlogDetailsSerializer
+
+    def get(self, request, *args, **kwargs):
+        # Get the latest four blogs from the database
+        latest_blogs = BlogDetails.objects.order_by('-id')[:4]
+
+        if latest_blogs:
+            serializer = self.serializer_class(latest_blogs, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({"detail": "No blog posts found in the database."})

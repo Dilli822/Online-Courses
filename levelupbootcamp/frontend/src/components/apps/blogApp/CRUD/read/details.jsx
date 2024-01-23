@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Spin, Row, Col, Typography, Image, Layout } from 'antd';
-import AppHeader from '../../header/header';
-import AppFooter from '../../footer/footer';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { Spin, Row, Col, Typography, Image, Layout } from "antd";
+import AppHeader from "../../header/header";
+import AppFooter from "../../footer/footer";
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -15,18 +15,20 @@ const Details = () => {
   useEffect(() => {
     const fetchBlogDetails = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/blog/api/blog-details/${id}/`);
+        const response = await fetch(
+          `http://127.0.0.1:8000/blog/api/blog-details/${id}/`
+        );
 
         if (!response.ok) {
-          console.error('Error fetching blog details. HTTP Status:', response.status);
+          console.error(
+            "Error fetching blog details. HTTP Status:",
+            response.status
+          );
           return;
         }
 
         const resultItems = await response.json();
 
-   
-
-    
         console.log(resultItems);
         // Exclude user_id from details
         const { user_id, ...mappedDetails } = resultItems;
@@ -34,7 +36,7 @@ const Details = () => {
         setDetails(mappedDetails);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching blog details:', error);
+        console.error("Error fetching blog details:", error);
         setLoading(false);
       }
     };
@@ -49,30 +51,38 @@ const Details = () => {
   return (
     <>
       <AppHeader />
-
       {/* Content inside Layout with 10% padding */}
-      <Content style={{ padding: '0 15%' }}>
+      <Content style={{ padding: "0 15%" }}>
         <Row>
           <Col span={24}>
             <Title>{details.title}</Title>
             <Text>Published at: {details.created_at}</Text>
-            <br/>
-            {/* <Text>Updated at: {details.updated_at}</Text> */}
-            {/* <Image src={details.image} alt="Blog Image" /> */}
-            <div  style={{ textAlign: "center"}}>
-        
-            {/* <Image src="https://unsplash.it/1500" alt="Blog Image" style={{ maxWidth: "100%", width: "500px"}}/> */}
-                   <Image src={details.image} alt="Blog Image" style={{ maxWidth: "100%", width: "500px"}} />
+            <br />
 
+     
+          <div style={{ textAlign: "center" }}>
+              <Image
+                src={details.image}
+                alt="Blog Image"
+                style={{ maxWidth: "100%", width: "500px" }}
+              />
             </div>
-            <br/>
-      
+         
+            <br />
+
             {/* Render other details as needed */}
-            <Text>{details.description}</Text>
+            <Text size="large" style={{ fontSize: "21px"}}>
+              {details.description.split("\r\n").map((paragraph, index) => (
+                <React.Fragment key={index}>
+                  {paragraph}
+                  <br />
+                </React.Fragment>
+              ))}
+            </Text>
           </Col>
         </Row>
-      </Content>         <br/>
-
+      </Content>{" "}
+      <br />
       <AppFooter />
     </>
   );
