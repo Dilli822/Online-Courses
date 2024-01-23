@@ -78,15 +78,15 @@ const TodoList = () => {
   };
 
   return (
-    <Layout>
-      <Header style={{ color: "#000", background: "#fff", padding: "0 16px" }}>
+    <Layout style={{ padding: "0 15%"}}>
+   
         <Title level={1}>Todo List</Title>
-      </Header>
+     
       
 
       <Content style={{ padding: "20px"}}>
         <Input placeholder="Enter a new task" value={newTask} onChange={(e) => setNewTask(e.target.value)} />
-        <Button type="primary" ghost onClick={handleAddTask} style={{ marginTop: "10px" , width: "6rem"}}>
+        <Button type="primary" ghost onClick={handleAddTask} style={{ marginTop: "10px" , minWidth: "6rem"}}>
           Add Task
         </Button>
         <List

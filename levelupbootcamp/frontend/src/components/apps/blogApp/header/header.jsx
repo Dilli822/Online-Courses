@@ -36,11 +36,13 @@ const AppHeader = () => {
     "/create",
     `/update/\\d+`, // Matches /update/:id where :id is a number
     "/blogs",
+    "/todoList",
     "/details/\\d+", // Matches /details/:id where :id is a number
   ].some((pattern) => new RegExp(pattern).test(window.location.pathname));
 
   const [menuLoggedItems, setMenuLoggedItems] = useState([
     { key: "home", label: "Home", path: "/feed" },
+    { key: "todo", label: "ToDo", path: "/todoList" },
     { key: "blog post", label: "Post", path: "/create" },
     { key: "blogs", label: "Blogs", path: "/blogs" },
     { key: "profile", label: "Profile", path: "/profile" },
