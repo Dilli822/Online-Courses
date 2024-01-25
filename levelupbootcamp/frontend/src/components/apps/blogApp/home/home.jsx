@@ -5,13 +5,6 @@ import { Card, Timeline } from "antd";
 import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { Layout, Button, theme } from "antd";
 import { Col, Row } from "antd";
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 const { Meta } = Card;
