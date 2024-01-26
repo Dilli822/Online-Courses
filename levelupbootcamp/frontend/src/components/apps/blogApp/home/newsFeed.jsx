@@ -3,7 +3,8 @@ import AppHeader from "../header/header";
 import AppFooter from "../footer/footer";
 import { Card, Timeline } from "antd";
 import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
-import { Layout, Button, theme } from "antd";
+import { Layout, Button, theme, List, AutoComplete, Input } from "antd";
+
 import { Col, Row } from "antd";
 import {
   MenuFoldOutlined,
@@ -11,11 +12,13 @@ import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 const { Meta } = Card;
 const { Header, Sider, Content } = Layout;
+const { Option } = AutoComplete;
 
 const formatDate = (rawDate) => {
   const options = { day: "numeric", month: "short", year: "numeric" };
@@ -30,7 +33,7 @@ const NewsFeed = () => {
   const [collapsed, setCollapsed] = useState(true);
   const [visibleCards, setVisibleCards] = useState(4);
   const [isAdditionalVisible, setIsAdditionalVisible] = useState(false);
-
+  const [searchQuery, setSearchQuery] = useState("");
   const currentDate = new Date().toLocaleDateString();
   const options = { day: "numeric", month: "short", year: "numeric" };
   const formattedDate = new Date(currentDate).toLocaleDateString(
@@ -133,6 +136,12 @@ const NewsFeed = () => {
     return blogDate >= yesterday && blogDate <= today;
   });
 
+  const searchedBlogResult = blogData.filter((blogItem) =>
+    blogItem.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Use `filteredBlogData` instead of `blogData` in your rendering logic
+
   return (
     <>
       <AppHeader></AppHeader>
@@ -217,10 +226,50 @@ const NewsFeed = () => {
               }}
             >
               <h3>
-                {" "}
                 Recent | Total Blogs Posted:{" "}
-                {localStorage.getItem("total_blogs_count")}+{" "}
+                {localStorage.getItem("total_blogs_count")}+
               </h3>
+              <div>
+                <Input
+                  type="text"
+                  placeholder="Search Blogs..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  prefix={<SearchOutlined />}
+                  size="large" // Set the size to "large" for a larger input
+                />
+              </div>
+
+              {searchQuery && (
+                <>
+                  <h3>Result:</h3>
+                  <List
+                    dataSource={searchedBlogResult}
+                    renderItem={(blogItem) => (
+                      <List.Item>
+                        <Link to={`/details/${blogItem.id}`}>
+                          <Card
+                            hoverable
+                            cover={
+                              <img alt={blogItem.title} src={blogItem.image} />
+                            }
+                          >
+                            <div style={{ height: 20, overflow: "hidden" }}>
+                              <Meta
+                                title={blogItem.title}
+                                description={blogItem.description}
+                              />
+                              <p>{blogItem.date}</p>
+                            </div>
+                          </Card>
+                        </Link>
+                      </List.Item>
+                    )}
+                  />
+                </>
+              )}
+
+              <br />
               <hr />
 
               {filteredRecentBlogs.map((blogItem, index) => (
